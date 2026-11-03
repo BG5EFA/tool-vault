@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Tool Archive">
+  <rect width="64" height="64" rx="10" fill="#06070a"/>
+  <path d="M12 15h22L12 37Z" fill="#2ff3ff" opacity=".18"/>
+  <path d="M52 49H30l22-22Z" fill="#ff2f7a" opacity=".18"/>
+  <path d="M15 18l17 30 17-30" fill="none" stroke="#ff2f7a" stroke-width="7" stroke-linecap="square" opacity=".5" transform="translate(2 2)"/>
+  <path d="M15 18l17 30 17-30" fill="none" stroke="#2ff3ff" stroke-width="5" stroke-linecap="square"/>
+  <rect x="1" y="1" width="62" height="62" rx="10" fill="none" stroke="#2ff3ff" stroke-opacity=".35"/>
+</svg>

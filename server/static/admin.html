@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#07080a" />
+<meta name="robots" content="noindex, nofollow" />
+<title>资源控制台 — TOOL VAULT</title>
+<link rel="icon" href="/assets/favicon.png" type="image/png" sizes="64x64" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+<link rel="stylesheet" href="/admin/admin.css" />
+</head>
+<body>
+
+<div class="fx-grid" data-component="fx-grid" aria-hidden="true"></div>
+<div class="fx-glow" data-component="fx-glow" aria-hidden="true"></div>
+<div class="fx-scan" data-component="fx-scan" aria-hidden="true"></div>
+
+<div class="boot" id="bootView" data-component="boot">
+  <span class="boot-dot" aria-hidden="true"></span>
+  <span>LINKING CONTROL CHANNEL</span>
+</div>
+
+<main class="login-view" id="loginView" data-component="login-view" hidden>
+  <section class="login-card panel" data-component="login-card" aria-labelledby="loginTitle">
+    <div class="login-brand">
+      <img class="brand-logo" src="/assets/logo-mark.png" alt="" width="38" height="38" />
+      <span class="brand-text">VAULT<span class="brand-sub">// CONTROL</span></span>
+    </div>
+
+    <p class="eyebrow">// RESTRICTED ACCESS</p>
+    <h1 id="loginTitle">资源控制台</h1>
+    <p class="lede">输入管理员口令，管理工具库的资源条目。</p>
+
+    <form id="loginForm" class="login-form">
+      <label class="field" for="password">
+        <span>管理员口令</span>
+        <span class="password-wrap">
+          <input id="password" name="password" type="password" required
+                 autocomplete="current-password" spellcheck="false" autofocus />
+          <button type="button" class="pw-toggle" id="togglePw" aria-label="显示口令">显示</button>
+        </span>
+      </label>
+
+      <p class="form-error" id="loginError" role="alert" hidden></p>
+
+      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">进入控制台</button>
+    </form>
+
+    <p class="login-hint">连续输入错误 6 次将锁定 10 分钟。</p>
+    <a class="back-link" href="/">← 返回工具库</a>
+  </section>
+</main>
+
+<div class="app" id="appView" hidden>
+  <header class="topbar" data-component="site-header">
+    <a class="brand" href="/admin/" aria-label="资源控制台首页">
+      <img class="brand-logo" src="/assets/logo-mark.png" alt="" width="38" height="38" />
+      <span class="brand-text">VAULT<span class="brand-sub">// CONTROL</span></span>
+    </a>
+
+    <div class="top-actions">
+      <a class="ghost-link" href="/" target="_blank" rel="noopener">查看前台 ↗</a>
+      <button type="button" class="btn btn-ghost" id="pwBtn">修改口令</button>
+      <button type="button" class="btn btn-ghost" id="logoutBtn">退出</button>
+    </div>
+  </header>
+
+  <main class="wrap" data-component="admin-main">
+    <section class="head" data-component="page-head">
+      <div class="head-copy">
+        <p class="eyebrow">// RESOURCE CONTROL</p>
+        <h1>资源管理</h1>
+        <p class="sub">当前收录 <strong id="statTotal">—</strong> 项 · 开源 <strong id="statOss">—</strong> · 分类 <strong id="statCats">—</strong></p>
+      </div>
+      <button type="button" class="btn btn-primary btn-lg" id="addBtn">+ 新增资源</button>
+    </section>
+
+    <section class="toolbar" data-component="filters" aria-label="筛选资源">
+      <div class="search">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="M16 16l5 5"></path>
+        </svg>
+        <label class="sr-only" for="adminQ">搜索资源</label>
+        <input id="adminQ" type="search" placeholder="搜索名称、厂商、标签" autocomplete="off" spellcheck="false" />
+      </div>
+
+      <label class="sr-only" for="filterCat">按分类筛选</label>
+      <select id="filterCat" class="select">
+        <option value="all">全部分类</option>
+        <option value="SYS">系统</option>
+        <option value="NET">网络</option>
+        <option value="DEV">开发</option>
+        <option value="MED">媒体</option>
+        <option value="SEC">安全</option>
+        <option value="UTL">效率</option>
+      </select>
+
+      <label class="sr-only" for="filterLic">按授权筛选</label>
+      <select id="filterLic" class="select">
+        <option value="all">全部授权</option>
+        <option value="开源">开源</option>
+        <option value="免费">免费</option>
+        <option value="商业">商业</option>
+      </select>
+
+      <span class="list-count" id="listCount" aria-live="polite">—</span>
+    </section>
+
+    <section class="table-wrap panel-flat" data-component="resource-table" aria-label="资源列表">
+      <table class="tools-table">
+        <caption class="sr-only">工具库资源列表，可编辑或删除</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="col-idx">#</th>
+            <th scope="col">名称 / 厂商</th>
+            <th scope="col" class="col-cat">分类</th>
+            <th scope="col" class="col-plat">平台</th>
+            <th scope="col" class="col-lic">授权</th>
+            <th scope="col" class="col-act">操作</th>
+          </tr>
+        </thead>
+        <tbody id="toolRows"></tbody>
+      </table>
+
+      <div class="empty" id="listEmpty" hidden>
+        <p class="empty-code">NO MATCH</p>
+        <p>没有符合条件的资源。</p>
+        <button type="button" class="link-btn" id="clearFilters">清除筛选</button>
+      </div>
+    </section>
+
+    <p class="foot-note">保存后写入 <code>assets/js/data.js</code>；前台 JS 已设为 no-cache，刷新即生效。每次写入前会自动备份到服务器 <code>backups/</code>。</p>
+  </main>
+</div>
+
+<div class="modal" id="toolModal" data-component="modal" hidden>
+  <div class="modal-backdrop" data-close="toolModal"></div>
+  <div class="modal-panel panel" role="dialog" aria-modal="true" aria-labelledby="toolModalTitle">
+    <header class="modal-head">
+      <h2 id="toolModalTitle">新增资源</h2>
+      <button type="button" class="icon-btn" data-close="toolModal" aria-label="关闭">×</button>
+    </header>
+
+    <form id="toolForm" class="tool-form" novalidate>
+      <input type="hidden" id="fMode" value="add" />
+      <div class="grid-2">
+        <label class="field" for="fName">
+          <span>名称 <i>*</i></span>
+          <input id="fName" name="name" maxlength="60" required autocomplete="off" />
+        </label>
+        <label class="field" for="fId">
+          <span>ID <em>留空自动生成</em></span>
+          <input id="fId" name="id" maxlength="40" autocomplete="off" spellcheck="false" placeholder="例如 everything" />
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label class="field" for="fVendor">
+          <span>厂商 / 作者</span>
+          <input id="fVendor" name="vendor" maxlength="60" autocomplete="off" />
+        </label>
+        <label class="field" for="fUrl">
+          <span>官方链接 <i>*</i></span>
+          <input id="fUrl" name="url" type="url" maxlength="500" required autocomplete="off" placeholder="https://" />
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label class="field" for="fCat">
+          <span>分类 <i>*</i></span>
+          <select id="fCat" name="cat">
+            <option value="SYS">系统</option>
+            <option value="NET">网络</option>
+            <option value="DEV">开发</option>
+            <option value="MED">媒体</option>
+            <option value="SEC">安全</option>
+            <option value="UTL">效率</option>
+          </select>
+        </label>
+        <label class="field" for="fLic">
+          <span>授权 <i>*</i></span>
+          <select id="fLic" name="license">
+            <option value="开源">开源</option>
+            <option value="免费">免费</option>
+            <option value="商业">商业</option>
+          </select>
+        </label>
+      </div>
+
+      <fieldset class="field checkbox-field">
+        <legend>平台 <i>*</i></legend>
+        <div class="check-row">
+          <label class="check"><input type="checkbox" name="platform" value="WIN" /><span>Windows</span></label>
+          <label class="check"><input type="checkbox" name="platform" value="MAC" /><span>macOS</span></label>
+          <label class="check"><input type="checkbox" name="platform" value="LINUX" /><span>Linux</span></label>
+        </div>
+      </fieldset>
+
+      <label class="field" for="fTags">
+        <span>标签 <em>逗号分隔，最多 8 个</em></span>
+        <input id="fTags" name="tags" maxlength="200" autocomplete="off" placeholder="压缩, 解压, 7z" />
+      </label>
+
+      <label class="field" for="fDesc">
+        <span>一句话说明 <i>*</i> <em id="descCount">0 / 200</em></span>
+        <textarea id="fDesc" name="desc" rows="3" maxlength="200" required></textarea>
+      </label>
+
+      <p class="form-error" id="formError" role="alert" hidden></p>
+
+      <footer class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="toolModal">取消</button>
+        <button type="submit" class="btn btn-primary" id="saveBtn">保存</button>
+      </footer>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="deleteModal" data-component="modal" hidden>
+  <div class="modal-backdrop" data-close="deleteModal"></div>
+  <div class="modal-panel panel modal-sm" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+    <header class="modal-head">
+      <h2 id="deleteTitle">删除资源</h2>
+      <button type="button" class="icon-btn" data-close="deleteModal" aria-label="关闭">×</button>
+    </header>
+    <div class="modal-body">
+      <p>确定删除 <strong id="deleteName"></strong> 吗？</p>
+      <p class="warn">删除后前台立即消失。写入前的版本会保存在服务器 <code>backups/</code> 目录。</p>
+    </div>
+    <footer class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close="deleteModal">取消</button>
+      <button type="button" class="btn btn-danger" id="confirmDelete">确认删除</button>
+    </footer>
+  </div>
+</div>
+
+<div class="modal" id="pwModal" data-component="modal" hidden>
+  <div class="modal-backdrop" data-close="pwModal"></div>
+  <div class="modal-panel panel modal-sm" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+    <header class="modal-head">
+      <h2 id="pwTitle">修改管理员口令</h2>
+      <button type="button" class="icon-btn" data-close="pwModal" aria-label="关闭">×</button>
+    </header>
+
+    <form id="pwForm" class="tool-form">
+      <label class="field" for="pwCurrent">
+        <span>当前口令</span>
+        <input id="pwCurrent" type="password" autocomplete="current-password" required />
+      </label>
+      <label class="field" for="pwNext">
+        <span>新口令 <em>至少 10 位</em></span>
+        <input id="pwNext" type="password" autocomplete="new-password" minlength="10" maxlength="128" required />
+      </label>
+      <label class="field" for="pwConfirm">
+        <span>重复新口令</span>
+        <input id="pwConfirm" type="password" autocomplete="new-password" minlength="10" maxlength="128" required />
+      </label>
+
+      <p class="form-error" id="pwError" role="alert" hidden></p>
+
+      <footer class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="pwModal">取消</button>
+        <button type="submit" class="btn btn-primary" id="pwSaveBtn">更新口令</button>
+      </footer>
+    </form>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts" data-component="toast-stack" aria-live="polite"></div>
+
+<noscript>
+  <p class="noscript">控制台需要启用 JavaScript 才能使用。</p>
+</noscript>
+
+<script src="/admin/admin.js" defer></script>
+</body>
+</html>

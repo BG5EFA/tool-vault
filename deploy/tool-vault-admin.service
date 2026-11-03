@@ -1,0 +1,25 @@
+[Unit]
+Description=Tool Vault Admin API
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/tool-vault-admin
+Environment=TV_DATA_FILE=/var/www/tool-vault/assets/js/data.js
+Environment=TV_ALLOWED_HOSTS=res.example.com,127.0.0.1:8787,127.0.0.1,localhost:8787,localhost
+Environment=TV_ALLOWED_ORIGINS=https://res.example.com
+ExecStart=/var/www/tool-vault-admin/.venv/bin/gunicorn --workers 2 --threads 4 --bind 127.0.0.1:8787 --access-logfile - --error-logfile - app:app
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/www/tool-vault-admin /var/www/tool-vault/assets/js
+CapabilityBoundingSet=
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

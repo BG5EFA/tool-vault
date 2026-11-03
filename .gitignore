@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 后台运行时数据（含口令哈希、会话与访问审计，切勿提交）
+admin.db
+admin.db-shm
+admin.db-wal
+data.lock
+audit.log
+backups/
+
+# 本地配置与备份
+.env
+*.bak
+*.swp
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

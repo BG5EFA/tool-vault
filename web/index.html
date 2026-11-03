@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#07080a" />
+<title>工具库 — 开源与免费软件归档</title>
+<meta name="description" content="按用途归档的开源与免费工具，支持分类、平台、授权筛选与搜索，链接直达官方发布页。" />
+<meta property="og:title" content="工具库 — 开源与免费软件归档" />
+<meta property="og:description" content="按用途归档的开源与免费工具，链接直达官方发布页。" />
+<meta property="og:type" content="website" />
+<link rel="icon" href="assets/favicon.png" type="image/png" sizes="64x64" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<link rel="stylesheet" href="assets/css/augmented-ui.min.css" />
+<link rel="stylesheet" href="assets/css/vault.css?v=20261102-2" />
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主内容</a>
+
+<div class="fx-grid" data-component="fx-grid" aria-hidden="true"></div>
+<div class="fx-glow" data-component="fx-glow" aria-hidden="true"></div>
+<div class="fx-scan" data-component="fx-scan" aria-hidden="true"></div>
+
+<header class="topbar" data-component="site-header">
+  <a class="brand" href="./" aria-label="工具库首页">
+    <img class="brand-logo" src="assets/logo-mark.png" alt="" width="38" height="38" />
+    <span class="brand-text">VAULT<span class="brand-sub">// TOOL ARCHIVE</span></span>
+  </a>
+
+  <div class="search" role="search">
+    <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5"></circle>
+      <path d="M16 16l5 5"></path>
+    </svg>
+    <label class="sr-only" for="q">搜索工具</label>
+    <input id="q" type="search" placeholder="搜索工具、厂商或标签" autocomplete="off" spellcheck="false" />
+    <kbd class="search-kbd" aria-hidden="true">/</kbd>
+  </div>
+
+  <a class="topbar-link" href="https://github.com/" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+</header>
+
+<main id="main">
+  <section class="intro" data-component="intro">
+    <p class="eyebrow">// PUBLIC SOFTWARE ARCHIVE</p>
+    <h1>工具库</h1>
+    <p class="lede">按用途归档的开源与免费软件。。</p>
+
+    <dl class="stats" id="stats" data-component="stats">
+      <div><dt>收录</dt><dd id="statTotal">—</dd></div>
+      <div><dt>分类</dt><dd id="statCats">—</dd></div>
+      <div><dt>开源</dt><dd id="statOss">—</dd></div>
+      <div><dt>覆盖平台</dt><dd>WIN / MAC / LINUX</dd></div>
+    </dl>
+  </section>
+
+  <section class="filters" data-component="filters" aria-label="筛选条件">
+    <div class="filter-row">
+      <span class="filter-label">分类</span>
+      <div class="chips" id="catChips" role="group" aria-label="按分类筛选"></div>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-label">平台</span>
+      <div class="chips" id="platChips" role="group" aria-label="按平台筛选"></div>
+      <span class="filter-label filter-label-gap">授权</span>
+      <div class="chips" id="licChips" role="group" aria-label="按授权筛选"></div>
+    </div>
+
+    <div class="filter-bar">
+      <p class="result-count" id="resultCount" aria-live="polite">加载中…</p>
+      <div class="filter-actions">
+        <label class="sort-label" for="sort">排序</label>
+        <select id="sort" class="sort">
+          <option value="default">推荐顺序</option>
+          <option value="name">名称 A–Z</option>
+          <option value="cat">按分类</option>
+        </select>
+        <button type="button" class="reset" id="resetBtn">清除筛选</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="results" data-component="results" aria-label="工具列表">
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" data-component="empty-state" hidden>
+      <p class="empty-code">NO MATCH</p>
+      <p>没有找到符合条件的工具。</p>
+      <button type="button" class="reset" id="emptyReset">清除全部筛选</button>
+    </div>
+  </section>
+</main>
+
+<footer class="footer" data-component="site-footer">
+  <span>© <span id="year">2026</span> TOOL VAULT · TOOL ARCHIVE</span>
+  <span class="footer-mid">链接均指向官方来源 · 本站不提供安装包镜像</span>
+  <a href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a>
+</footer>
+
+<noscript>
+  <p class="noscript">本站需要启用 JavaScript 才能筛选与渲染工具列表。</p>
+</noscript>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>
